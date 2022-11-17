@@ -3,12 +3,13 @@ using UnityEngine;
 public class Controller : MonoBehaviour
 {
     [SerializeField] Camera _camera;
-    [SerializeField] Vector3 offset;
     [SerializeField] GameObject _selectObj;
 
     private Vector3 _planeHitPos;
     private Ray _nowRay;
     private RaycastHit _hit;
+
+    [SerializeField] float RotSpeed;
 
 
     Vector3 GetPlaneHitPosition()
@@ -50,7 +51,7 @@ public class Controller : MonoBehaviour
     void MoveSelectedObject()
     {
         Vector3 planeHitPosRemoveY = new Vector3(_planeHitPos.x, _selectObj.transform.position.y, _planeHitPos.z);
-        _selectObj.transform.position = (planeHitPosRemoveY + offset);
+        _selectObj.transform.position = planeHitPosRemoveY;
     }
 
     private void RayUpdateToCam()
@@ -96,6 +97,21 @@ public class Controller : MonoBehaviour
                 MoveSelectedObject();
             }
         }
+
+        if (!_selectObj)
+        {
+            return;
+        }
+
+        if (Input.mouseScrollDelta.y != 0)
+        {
+            Vector3 rotateVector = new Vector3(0, Input.mouseScrollDelta.y, 0);
+            _selectObj.transform.eulerAngles += rotateVector * RotSpeed;
+
+        }
+
+
+
 
     }
 }
